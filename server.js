@@ -56,32 +56,5 @@ app.use('/api/user', verify_user, privateRoutes);
 // Global error handler
 app.use(error_handler);
 
-// Serve static assets if in production
-if (isProduction) {
-  // Set headers to read compressed js file
-  app.get('*.js', (req, res, next) => {
-    req.url = req.url + '.gz';
-    res.set('Content-Encoding', 'gzip');
-    res.set('Content-Type', 'text/javascript');
-    next();
-  });
-
-  // Set headers to read compressed css file
-  app.get('*.css', (req, res, next) => {
-    req.url = req.url + '.gz';
-    res.set('Content-Encoding', 'gzip');
-    res.set('Content-Type', 'text/css');
-    next();
-  });
-
-  // Set static folder
-  app.use(express.static(path.join(__dirname, 'client', 'build')));
-
-  // Set path to all routes
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
-  });
-}
-
 const PORT = 3000;
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));
