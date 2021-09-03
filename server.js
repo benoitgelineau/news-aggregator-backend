@@ -6,12 +6,10 @@ const cors = require('cors');
 const morgan = require('morgan');
 
 // Routes
-const publicRoutes = require('./routes/api');
-const privateRoutes = require('./routes/secure-api');
+const routes = require('./routes');
 
 // Middlewares
-const verify_user = require('./routes/auth');
-const error_handler = require('./_helpers/errorHandler');
+const errorHandler = require('./utils/errorHandler');
 
 const app = express();
 
@@ -44,14 +42,13 @@ mongoose
 
 app.use(passport.initialize());
 
-// Passport authentication to secure the api
-require('./config/passport');
+// Handle authentication with JWT & local Passport strategies
+require('./passport/strategies');
 
-app.use('/api', publicRoutes);
-app.use('/api/user', verify_user, privateRoutes);
+app.use('/api', routes);
 
 // Global error handler
-app.use(error_handler);
+app.use(errorHandler);
 
 const PORT = 3000;
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));

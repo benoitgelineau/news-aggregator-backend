@@ -4,9 +4,8 @@ const { Schema } = mongoose;
 
 const UserSchema = new Schema(
 	{
-		username: { type: String, unique: true, required: true },
+		login: { type: String, unique: true, required: true },
 		password: { type: String, required: true },
-		// createdAt: { type: Date, default: Date.now }, // Remove default? otherwise it updates every time?
 		updatedAt: { type: Date, default: Date.now },
 		bookmarks: [],
 	},
