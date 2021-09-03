@@ -2,10 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
-const path = require('path');
 
 // Routes
 const publicRoutes = require('./routes/api');
@@ -31,8 +29,8 @@ app.use(
 );
 
 app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 // Connect to Mongo
