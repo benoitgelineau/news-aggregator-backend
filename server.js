@@ -17,19 +17,18 @@ const error_handler = require('./_helpers/errorHandler');
 
 const app = express();
 
-const {
-  APP_URL,
-  NODE_ENV,
-} = process.env;
+const { APP_URL, NODE_ENV } = process.env;
 const isProduction = NODE_ENV === 'production';
 
 mongoose.Promise = global.Promise;
 
-app.use(cors({
-  origin: APP_URL,
-  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
-  credentials: true // To receive cookies from client
-}));
+app.use(
+	cors({
+		origin: APP_URL,
+		optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+		credentials: true, // To receive cookies from client
+	})
+);
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -38,12 +37,12 @@ app.use(morgan('dev'));
 
 // Connect to Mongo
 mongoose
-  .connect(
-    `mongodb://mongo:27017/myapp`,
-    { useNewUrlParser: true }
-  )
-  .then(() => console.log('MongoDB connected...'))
-  .catch(err => console.log('MongoDB connection error:', err));
+	.connect(
+		`mongodb://mongo:27017/myapp`
+		// { useNewUrlParser: true }
+	)
+	.then(() => console.log('MongoDB connected...'))
+	.catch((err) => console.log('MongoDB connection error:', err));
 
 app.use(passport.initialize());
 
