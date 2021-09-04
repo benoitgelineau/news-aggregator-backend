@@ -6,7 +6,7 @@ const UserSchema = new Schema(
 	{
 		login: { type: String, unique: true, required: true },
 		password: { type: String, required: true },
-		updatedAt: { type: Date, default: Date.now },
+		updatedAt: Date,
 		bookmarks: [],
 	},
 	{
