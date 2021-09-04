@@ -3,7 +3,7 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const { getTokenHeader, getTokenSignature } = require('../utils/cookieHandler');
 
-const { APP_URL } = process.env;
+const { PUBLIC_URL } = process.env;
 
 const signIn = async (req, res, next) => {
 	// SignIn after verify_user, if token, I should be able to signIn without creating a new token
@@ -26,7 +26,7 @@ const signIn = async (req, res, next) => {
 				const privateKey = fs.readFileSync('./private-key.pem', 'utf8');
 				const options = {
 					issuer: 'Benoit G.',
-					audience: APP_URL,
+					audience: PUBLIC_URL,
 					algorithm: 'RS256',
 				};
 				const token = jwt.sign(payload, privateKey, options);

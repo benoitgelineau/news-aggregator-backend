@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   backend:
@@ -10,8 +10,7 @@ services:
     links:
       - mongo
     environment:
-      APP_URL: 'http://localhost:3000'
-      NODE_ENV: production
+      PUBLIC_URL: 'http://localhost:3000'
   mongo:
     container_name: mongo
     image: mongo

@@ -3,10 +3,11 @@
 An API to handle user login & save user's favorite articles.
 
 Environment variables:
-- `NODE_ENV`: Node environment (i.e. `development` | `production`)
-- `APP_URL`: URL of the site
+
+- `PUBLIC_URL`: URL of the site
 
 Use of RSA keys:
+
 - `./public-key.pem`
 - `./private-key.pem`
 

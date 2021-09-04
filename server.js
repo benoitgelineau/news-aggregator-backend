@@ -13,14 +13,13 @@ const errorHandler = require('./utils/errorHandler');
 
 const app = express();
 
-const { APP_URL, NODE_ENV } = process.env;
-const isProduction = NODE_ENV === 'production';
+const { PUBLIC_URL } = process.env;
 
 mongoose.Promise = global.Promise;
 
 app.use(
 	cors({
-		origin: APP_URL,
+		origin: PUBLIC_URL,
 		optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 		credentials: true, // To receive cookies from client
 	})
@@ -33,10 +32,7 @@ app.use(morgan('dev'));
 
 // Connect to Mongo
 mongoose
-	.connect(
-		`mongodb://mongo:27017/myapp`
-		// { useNewUrlParser: true }
-	)
+	.connect(`mongodb://mongo:27017/myapp`)
 	.then(() => console.log('MongoDB connected...'))
 	.catch((err) => console.log('MongoDB connection error:', err));
 
