@@ -17,17 +17,17 @@ router.post('/signOff', authController.signOff);
 router.get(
 	'/bookmarks',
 	validateJwtAuthentication,
-	bookmarksController.get_bookmarks
+	bookmarksController.getBookmarks
 );
 router.post(
 	'/bookmarks',
 	validateJwtAuthentication,
-	bookmarksController.insert_bookmark
+	bookmarksController.addBookmark
 );
-router.put(
+router.delete(
 	'/bookmarks',
 	validateJwtAuthentication,
-	bookmarksController.remove_bookmark
+	bookmarksController.deleteBookmark
 );
 
 module.exports = router;
