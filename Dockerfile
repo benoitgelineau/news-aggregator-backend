@@ -1,10 +1,13 @@
 FROM node:14
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-COPY package.json /usr/src/app/
+ARG APP_DIR
+
+RUN mkdir -p $APP_DIR
+WORKDIR $APP_DIR
+COPY package.json $APP_DIR/
 
 RUN yarn install
 
-COPY . /usr/src/app/
+COPY . $APP_DIR/
+
 CMD ["yarn", "start"]

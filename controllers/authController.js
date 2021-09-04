@@ -3,10 +3,7 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const { getTokenHeader, getTokenSignature } = require('../utils/cookieHandler');
 
-const { PUBLIC_URL } = process.env;
-
 const signIn = async (req, res, next) => {
-	// SignIn after verify_user, if token, I should be able to signIn without creating a new token
 	passport.authenticate(
 		'login',
 		{ session: false },
@@ -25,8 +22,8 @@ const signIn = async (req, res, next) => {
 				const payload = { _id: user.id };
 				const privateKey = fs.readFileSync('./private-key.pem', 'utf8');
 				const options = {
-					issuer: 'Benoit G.',
-					audience: PUBLIC_URL,
+					issuer: process.env.JWT_ISSUER,
+					audience: process.env.PUBLIC_URL,
 					algorithm: 'RS256',
 				};
 				const token = jwt.sign(payload, privateKey, options);

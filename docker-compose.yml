@@ -3,17 +3,24 @@ version: '3.8'
 services:
   backend:
     container_name: backend
-    restart: always
-    build: .
+    restart: unless-stopped
+    build:
+      context: .
+      args:
+        APP_DIR: /usr/app
+    volumes:
+      - $PUBLIC_FOLDER:/usr/app/public
     ports:
       - 3000:3000
     links:
       - mongo
     environment:
-      PUBLIC_URL: 'http://localhost:3000'
+      JWT_ISSUER: $JWT_ISSUER
+      NODE_ENV: $NODE_ENV
+      PUBLIC_URL: $PUBLIC_URL
   mongo:
     container_name: mongo
     image: mongo
-    restart: always
+    restart: unless-stopped
     ports:
       - 27017:27017

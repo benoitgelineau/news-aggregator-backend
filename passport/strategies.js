@@ -5,7 +5,6 @@ const JWTstrategy = require('passport-jwt').Strategy;
 const User = require('../models/user');
 const { cookieExtractor } = require('../utils/cookieHandler');
 
-const { PUBLIC_URL } = process.env;
 const publicKey = fs.readFileSync('./public-key.pem', 'utf8');
 
 passport.use(
@@ -40,8 +39,8 @@ passport.use(
 		{
 			jwtFromRequest: cookieExtractor,
 			secretOrKey: publicKey,
-			issuer: 'Benoit G.',
-			audience: PUBLIC_URL,
+			issuer: process.env.JWT_ISSUER,
+			audience: process.env.PUBLIC_URL,
 			algorithms: ['RS256'],
 		},
 		async (jwtPayload, done) => {

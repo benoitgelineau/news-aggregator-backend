@@ -4,9 +4,14 @@ An API to handle user login & save user's favorite articles.
 
 Environment variables:
 
-- `PUBLIC_URL`: URL of the site
+- `JWT_ISSUER`: Issuer reference to create the JWT token with
+- `NODE_ENV`: 'development' | 'production'
+- `PUBLIC_FOLDER`: Path to the static files to serve
+- `PUBLIC_URL`: URL of the website
 
-Use of RSA keys:
+Hint: Use the flag `--env-file` from the Docker command to include your `.env` file.
+
+Use of RSA keys, to be generated at the root of the project, before building the Docker image:
 
 - `./public-key.pem`
 - `./private-key.pem`
