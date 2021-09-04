@@ -12,14 +12,19 @@ const getBookmarks = async (req, res, next) => {
 
 const addBookmark = async (req, res, next) => {
 	try {
-		await User.findByIdAndUpdate(
-			res.locals.user._id,
+		await User.findOneAndUpdate(
+			{
+				id: res.locals.user._id,
+				'bookmarks.id': {
+					$ne: req.body.article.id,
+				},
+			},
 			{
 				$push: { bookmarks: { ...req.body.article } },
 				$set: { updatedAt: Date.now() },
 			},
 			{ new: true }
-		).select('-password');
+		);
 
 		return res.status(201).end();
 	} catch (error) {
@@ -36,7 +41,7 @@ const deleteBookmark = async (req, res, next) => {
 				$set: { updatedAt: Date.now() },
 			},
 			{ new: true }
-		).select('-password');
+		);
 
 		return res.status(204).end();
 	} catch (error) {
