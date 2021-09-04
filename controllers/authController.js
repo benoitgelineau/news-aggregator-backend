@@ -1,10 +1,9 @@
 const passport = require('passport');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
-const {
-	getJwtHeaderPayload,
-	getJwtSignature,
-} = require('../utils/cookieHandler');
+const { getTokenHeader, getTokenSignature } = require('../utils/cookieHandler');
+
+const { APP_URL } = process.env;
 
 const signIn = async (req, res, next) => {
 	// SignIn after verify_user, if token, I should be able to signIn without creating a new token
@@ -24,7 +23,6 @@ const signIn = async (req, res, next) => {
 
 			try {
 				const payload = { _id: user.id };
-				const { APP_URL } = process.env;
 				const privateKey = fs.readFileSync('./private-key.pem', 'utf8');
 				const options = {
 					issuer: 'Benoit G.',
@@ -33,16 +31,18 @@ const signIn = async (req, res, next) => {
 				};
 				const token = jwt.sign(payload, privateKey, options);
 
-				res.cookie('jwt_header&payload', getJwtHeaderPayload(token), {
-					secure: true,
-					maxAge: 1000 * 60 * 30, // 30mn
-					sameSite: true,
-				});
-				res.cookie('jwt_signature', getJwtSignature(token), {
-					secure: true,
-					httpOnly: true,
-					sameSite: true,
-				});
+				const cookieHeaderAndPayload = getTokenHeader();
+				res.cookie(
+					cookieHeaderAndPayload.name,
+					cookieHeaderAndPayload.getPayload(token),
+					cookieHeaderAndPayload.options
+				);
+				const cookieSignature = getTokenSignature();
+				res.cookie(
+					cookieSignature.name,
+					cookieSignature.getPayload(token),
+					cookieSignature.options
+				);
 
 				return res.status(200).end();
 			} catch (error) {
@@ -53,7 +53,10 @@ const signIn = async (req, res, next) => {
 };
 
 const signOff = (req, res) => {
-	res.clearCookie('jwt_header&payload');
+	const cookieHeaderAndPayload = getTokenHeader();
+	const cookieSignature = getTokenSignature();
+	res.clearCookie(cookieHeaderAndPayload.name, cookieHeaderAndPayload.options);
+	res.clearCookie(cookieSignature.name, cookieSignature.options);
 	return res.status(200).end();
 };
 

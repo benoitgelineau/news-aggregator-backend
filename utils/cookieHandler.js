@@ -1,18 +1,43 @@
-const cookieExtractor = ({ cookies }) => (
-  (cookies['jwt_header&payload'] && cookies['jwt_signature']) ?
- `${cookies['jwt_header&payload']}.${cookies['jwt_signature']}` : null
- );
+const getTokenHeader = () => ({
+	name: 'token',
+	options: {
+		secure: true,
+		maxAge: 1000 * 60 * 30, // 30mn
+		sameSite: true,
+	},
+	getPayload: getHeaderAndPayload,
+});
 
-const getJwtHeaderPayload = token => {
-  const array = token.split('.');
-  array.pop();
-  return array.join('.');
+const getTokenSignature = () => ({
+	name: 'tokenSignature',
+	options: {
+		secure: true,
+		httpOnly: true,
+		sameSite: true,
+	},
+	getPayload: getSignature,
+});
+
+const cookieExtractor = ({ cookies }) => {
+	const cookieHeaderAndPayload = getTokenHeader();
+	const cookieSignature = getTokenSignature();
+	return cookies[cookieHeaderAndPayload.name] && cookies[cookieSignature.name]
+		? `${cookies[cookieHeaderAndPayload.name]}.${cookies[cookieSignature.name]}`
+		: null;
 };
 
-const getJwtSignature = token => token.split('.')[2];
+function getHeaderAndPayload(token) {
+	const array = token.split('.');
+	array.pop();
+	return array.join('.');
+}
+
+function getSignature(token) {
+	return token.split('.')[2];
+}
 
 module.exports = {
-  cookieExtractor,
-  getJwtHeaderPayload,
-  getJwtSignature
+	getTokenHeader,
+	getTokenSignature,
+	cookieExtractor,
 };

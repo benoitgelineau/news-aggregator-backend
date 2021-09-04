@@ -1,4 +1,5 @@
 const passport = require('passport');
+const { getTokenHeader } = require('../utils/cookieHandler');
 
 const validateJwtAuthentication = (req, res, next) => {
 	passport.authenticate('jwt', { session: false }, (err, payload, info) => {
@@ -8,12 +9,13 @@ const validateJwtAuthentication = (req, res, next) => {
 			});
 		}
 		res.locals.user = payload;
+		const cookieHeaderAndPayload = getTokenHeader();
 		// ADD NEW 30 MINUTES
-		res.cookie('jwt_header&payload', req.cookies['jwt_header&payload'], {
-			secure: true,
-			maxAge: 1000 * 60 * 30, // 30mn
-			sameSite: true,
-		});
+		res.cookie(
+			cookieHeaderAndPayload.name,
+			req.cookies[cookieHeaderAndPayload.name],
+			cookieHeaderAndPayload.options
+		);
 		next();
 	})(req, res, next);
 };
