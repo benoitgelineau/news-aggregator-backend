@@ -15,6 +15,7 @@ services:
     environment:
       JWT_ISSUER: $JWT_ISSUER
       MONGO_DB_URL: mongodb://mongo:27017/
+      NEWS_API_KEY: $NEWS_API_KEY
       NODE_ENV: $NODE_ENV
       PUBLIC_URL: $PUBLIC_URL
   mongo:

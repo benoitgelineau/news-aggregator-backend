@@ -5,6 +5,7 @@ An API to handle user login & save user's favorite articles.
 Environment variables:
 
 - `JWT_ISSUER`: Issuer reference to create the JWT token with
+- `NEWS_API_KEY`: Api key from [News API](https://newsapi.org)
 - `NODE_ENV`: 'development' | 'production'
 - `PUBLIC_FOLDER`: Path to the static files to serve
 - `PUBLIC_URL`: URL of the website
