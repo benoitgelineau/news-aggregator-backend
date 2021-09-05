@@ -1,10 +1,10 @@
-FROM node:14
+FROM node:14-alpine
 
 ARG APP_DIR
 
 RUN mkdir -p $APP_DIR
 WORKDIR $APP_DIR
-COPY package.json $APP_DIR/
+COPY package.json yarn.lock $APP_DIR/
 
 RUN yarn install
 
