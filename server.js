@@ -27,13 +27,11 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-if (process.env.NODE_ENV === 'development') {
-	app.use(morgan('dev'));
-}
+app.use(morgan(process.env.NODE_ENV !== 'production' ? 'dev' : 'combined'));
 
 // Connect to Mongo
 mongoose
-	.connect(`mongodb://mongo:27017/myapp`)
+	.connect(process.env.MONGO_DB_URL)
 	.then(() => console.log('DB is connected.'))
 	.catch((err) => console.log('DB connection error:', err));
 
