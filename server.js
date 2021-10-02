@@ -18,7 +18,8 @@ mongoose.Promise = global.Promise;
 
 app.use(
 	cors({
-		origin: process.env.PUBLIC_URL,
+		origin:
+			process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : '*',
 		optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 		credentials: true, // To receive cookies from client
 	})
@@ -53,5 +54,5 @@ if (process.env.NODE_ENV === 'production') {
 	});
 }
 
-const PORT = 3000;
+const PORT = 5000;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));

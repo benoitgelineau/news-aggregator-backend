@@ -11,7 +11,7 @@ services:
     volumes:
       - $PUBLIC_FOLDER:/usr/app/public
     ports:
-      - 3000:3000
+      - 5000:5000
     environment:
       JWT_ISSUER: $JWT_ISSUER
       MONGO_DB_URL: mongodb://mongo:27017/
