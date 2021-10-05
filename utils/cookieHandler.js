@@ -3,7 +3,7 @@ const getTokenHeader = () => ({
 	options: {
 		secure: process.env.NODE_ENV === 'production',
 		maxAge: 1000 * 60 * 30, // 30mn
-		sameSite: true,
+		sameSite: process.env.NODE_ENV === 'production',
 	},
 	getPayload: getHeaderAndPayload,
 });
@@ -13,7 +13,7 @@ const getTokenSignature = () => ({
 	options: {
 		secure: process.env.NODE_ENV === 'production',
 		httpOnly: true,
-		sameSite: true,
+		sameSite: process.env.NODE_ENV === 'production',
 	},
 	getPayload: getSignature,
 });
