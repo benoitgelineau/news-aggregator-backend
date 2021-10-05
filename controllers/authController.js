@@ -12,8 +12,11 @@ const signIn = async (req, res, next) => {
 				return next(err);
 			}
 			if (!user) {
-				const reason = (info && info.reason) || 'User not found.';
-				return res.status(404).json({
+				const reason = info?.reason || info?.message;
+				if (!reason) {
+					return res.status(info?.httpsStatusCode ?? 404).end();
+				}
+				return res.status(info?.httpsStatusCode ?? 404).json({
 					reason,
 				});
 			}

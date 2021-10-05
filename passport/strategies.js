@@ -23,7 +23,10 @@ passport.use(
 
 				const validate = await user.isValidPassword(password);
 				if (!validate) {
-					return done(null, false, { reason: 'Incorrect password.' });
+					return done(null, false, {
+						httpsStatusCode: 403,
+						reason: 'Incorrect password.',
+					});
 				}
 
 				return done(null, user);
