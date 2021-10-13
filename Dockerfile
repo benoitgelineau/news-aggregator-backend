@@ -1,16 +1,13 @@
-FROM node:15.7-alpine
+FROM node:14-alpine
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-COPY package.json /usr/src/app/
+ARG APP_DIR
 
-RUN apk update && apk upgrade
-RUN apk add --no-cache --virtual .gyp \
-        python \
-        make \
-        g++ \
-    && npm install \
-    && apk del .gyp
+RUN mkdir -p $APP_DIR
+WORKDIR $APP_DIR
+COPY package.json yarn.lock $APP_DIR/
 
-COPY . /usr/src/app/
-CMD ["npm", "start"]
+RUN yarn install
+
+COPY . $APP_DIR/
+
+CMD ["yarn", "start"]
