@@ -1,29 +1,19 @@
-# News Aggregator Web Application
+# News Aggregator Backend
 
-A website that enables you to read headlines by topics, search for news articles and save them to read them later on.
+An API to handle user login & save user's favorite articles.
 
-Made with [News API](https://newsapi.org/).
+Environment variables:
 
-Client side environment variables:
-- `NODE_ENV`: Node environment (i.e. `development` | `production`)
-- `APP_URL`: URL of the site
-- `API_KEY`: News API key
+- `JWT_ISSUER`: Issuer reference to create the JWT token with
+- `NEWS_API_KEY`: Api key from [News API](https://newsapi.org)
+- `NODE_ENV`: 'development' | 'production'
+- `PRIVATE_KEY`: Path to the private RSA key
+- `PUBLIC_FOLDER`: Path to the static files to serve
+- `PUBLIC_KEY`: Path to the public RSA key
+- `PUBLIC_URL`: URL of the website
 
-Back-end side environment variables:
-- `NODE_ENV`: Node environment (i.e. `development` | `production`)
-- `APP_URL`: URL of the site
+Hint: Use the flag `--env-file` from the Docker command to include your `.env` file.
 
-Use of RSA keys:
-- `./public-key.pem`
-- `./private-key.pem`
+You need to generate the public & private RSA keys before building the Docker image.
 
 Hint: you can create both keys from this command `openssl req -nodes -new -x509 -keyout private-key.pem -out public-key.pem`
-
-# What I've learned
-
-- Set routes with React Router
-- Manage state with Redux
-- Configure Webpack
-- Implement user authentication with JWT & PassportJS
-- Containerize the app with Docker
-- Deploy with Heroku

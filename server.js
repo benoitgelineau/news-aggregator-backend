@@ -2,86 +2,57 @@ const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const path = require('path');
 
 // Routes
-const publicRoutes = require('./routes/api');
-const privateRoutes = require('./routes/secure-api');
+const routes = require('./routes');
 
 // Middlewares
-const verify_user = require('./routes/auth');
-const error_handler = require('./_helpers/errorHandler');
+const errorHandler = require('./utils/errorHandler');
 
 const app = express();
 
-const {
-  APP_URL,
-  NODE_ENV,
-} = process.env;
-const isProduction = NODE_ENV === 'production';
-
 mongoose.Promise = global.Promise;
 
-app.use(cors({
-  origin: APP_URL,
-  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
-  credentials: true // To receive cookies from client
-}));
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : '*',
+    optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+    credentials: true, // To receive cookies from client
+  })
+);
 
 app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(morgan('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan(process.env.NODE_ENV !== 'production' ? 'dev' : 'combined'));
 
 // Connect to Mongo
 mongoose
-  .connect(
-    `mongodb://mongo:27017/myapp`,
-    { useNewUrlParser: true }
-  )
-  .then(() => console.log('MongoDB connected...'))
-  .catch(err => console.log('MongoDB connection error:', err));
+  .connect(process.env.MONGO_DB_URL)
+  .then(() => console.log('DB is connected.'))
+  .catch((err) => console.log('DB connection error:', err));
 
 app.use(passport.initialize());
 
-// Passport authentication to secure the api
-require('./config/passport');
+// Handle authentication with JWT & local Passport strategies
+require('./passport/strategies');
 
-app.use('/api', publicRoutes);
-app.use('/api/user', verify_user, privateRoutes);
+app.use('/api', routes);
 
 // Global error handler
-app.use(error_handler);
+app.use(errorHandler);
 
-// Serve static assets if in production
-if (isProduction) {
-  // Set headers to read compressed js file
-  app.get('*.js', (req, res, next) => {
-    req.url = req.url + '.gz';
-    res.set('Content-Encoding', 'gzip');
-    res.set('Content-Type', 'text/javascript');
-    next();
-  });
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.resolve(__dirname, 'public')));
 
-  // Set headers to read compressed css file
-  app.get('*.css', (req, res, next) => {
-    req.url = req.url + '.gz';
-    res.set('Content-Encoding', 'gzip');
-    res.set('Content-Type', 'text/css');
-    next();
-  });
-
-  // Set static folder
-  app.use(express.static(path.join(__dirname, 'client', 'build')));
-
-  // Set path to all routes
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
   });
 }
 
-const PORT = 3000;
-app.listen(PORT, () => console.log(`listening on port ${PORT}`));
+const PORT = 5000;
+app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));

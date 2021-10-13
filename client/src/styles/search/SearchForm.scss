@@ -1,9 +1,0 @@
-@import '../helpers/sizes', '../helpers/colors', '../helpers/fonts';
-
-.header {
-  width: 100%;
-  background: $background-color;
-  color: $dark-font-color;
-  border-bottom: $header-border-size $primary-color solid;
-  padding-bottom: $header-padding;
-}

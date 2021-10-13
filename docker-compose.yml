@@ -1,20 +1,35 @@
-version: "3.8"
+version: '3.8'
 
 services:
   backend:
     container_name: backend
-    restart: always
-    build: .
+    restart: unless-stopped
+    build:
+      context: .
+      args:
+        APP_DIR: /usr/app
+    volumes:
+      - $PUBLIC_FOLDER:/usr/app/public
     ports:
-      - 3000:3000
-    links:
-      - mongo
+      - 5000:5000
     environment:
-      APP_URL: 'http://localhost:3000'
-      NODE_ENV: production
+      JWT_ISSUER: $JWT_ISSUER
+      MONGO_DB_URL: mongodb://mongo:27017/
+      NEWS_API_KEY: $NEWS_API_KEY
+      NODE_ENV: $NODE_ENV
+      PUBLIC_URL: $PUBLIC_URL
   mongo:
     container_name: mongo
-    image: mongo
-    restart: always
+    image: mongo:5
+    restart: unless-stopped
+    volumes:
+      - db:/data/db
     ports:
       - 27017:27017
+
+volumes:
+  db:
+
+networks:
+  default:
+    name: news-aggregator
