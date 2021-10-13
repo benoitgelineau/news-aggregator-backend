@@ -17,12 +17,12 @@ const app = express();
 mongoose.Promise = global.Promise;
 
 app.use(
-	cors({
-		origin:
-			process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : '*',
-		optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
-		credentials: true, // To receive cookies from client
-	})
+  cors({
+    origin:
+      process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : '*',
+    optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+    credentials: true, // To receive cookies from client
+  })
 );
 
 app.use(cookieParser());
@@ -32,9 +32,9 @@ app.use(morgan(process.env.NODE_ENV !== 'production' ? 'dev' : 'combined'));
 
 // Connect to Mongo
 mongoose
-	.connect(process.env.MONGO_DB_URL)
-	.then(() => console.log('DB is connected.'))
-	.catch((err) => console.log('DB connection error:', err));
+  .connect(process.env.MONGO_DB_URL)
+  .then(() => console.log('DB is connected.'))
+  .catch((err) => console.log('DB connection error:', err));
 
 app.use(passport.initialize());
 
@@ -47,11 +47,11 @@ app.use('/api', routes);
 app.use(errorHandler);
 
 if (process.env.NODE_ENV === 'production') {
-	app.use(express.static(path.resolve(__dirname, 'public')));
+  app.use(express.static(path.resolve(__dirname, 'public')));
 
-	app.get('*', (req, res) => {
-		res.sendFile(path.join(__dirname, 'public', 'index.html'));
-	});
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  });
 }
 
 const PORT = 5000;

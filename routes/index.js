@@ -16,19 +16,19 @@ router.post('/signOff', authController.signOff);
 
 /* BOOKMARKS */
 router.get(
-	'/bookmarks',
-	validateJwtAuthentication,
-	bookmarksController.getBookmarks
+  '/bookmarks',
+  validateJwtAuthentication,
+  bookmarksController.getBookmarks
 );
 router.post(
-	'/bookmarks',
-	validateJwtAuthentication,
-	bookmarksController.addBookmark
+  '/bookmarks',
+  validateJwtAuthentication,
+  bookmarksController.addBookmark
 );
 router.delete(
-	'/bookmarks',
-	validateJwtAuthentication,
-	bookmarksController.deleteBookmark
+  '/bookmarks',
+  validateJwtAuthentication,
+  bookmarksController.deleteBookmark
 );
 
 /* NEWS */

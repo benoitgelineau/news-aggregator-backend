@@ -1,43 +1,43 @@
 const getTokenHeader = () => ({
-	name: 'token',
-	options: {
-		secure: process.env.NODE_ENV === 'production',
-		maxAge: 1000 * 60 * 30, // 30mn
-		sameSite: process.env.NODE_ENV === 'production',
-	},
-	getPayload: getHeaderAndPayload,
+  name: 'token',
+  options: {
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 30, // 30mn
+    sameSite: process.env.NODE_ENV === 'production',
+  },
+  getPayload: getHeaderAndPayload,
 });
 
 const getTokenSignature = () => ({
-	name: 'tokenSignature',
-	options: {
-		secure: process.env.NODE_ENV === 'production',
-		httpOnly: true,
-		sameSite: process.env.NODE_ENV === 'production',
-	},
-	getPayload: getSignature,
+  name: 'tokenSignature',
+  options: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === 'production',
+  },
+  getPayload: getSignature,
 });
 
 const cookieExtractor = ({ cookies }) => {
-	const cookieHeaderAndPayload = getTokenHeader();
-	const cookieSignature = getTokenSignature();
-	return cookies[cookieHeaderAndPayload.name] && cookies[cookieSignature.name]
-		? `${cookies[cookieHeaderAndPayload.name]}.${cookies[cookieSignature.name]}`
-		: null;
+  const cookieHeaderAndPayload = getTokenHeader();
+  const cookieSignature = getTokenSignature();
+  return cookies[cookieHeaderAndPayload.name] && cookies[cookieSignature.name]
+    ? `${cookies[cookieHeaderAndPayload.name]}.${cookies[cookieSignature.name]}`
+    : null;
 };
 
 function getHeaderAndPayload(token) {
-	const array = token.split('.');
-	array.pop();
-	return array.join('.');
+  const array = token.split('.');
+  array.pop();
+  return array.join('.');
 }
 
 function getSignature(token) {
-	return token.split('.')[2];
+  return token.split('.')[2];
 }
 
 module.exports = {
-	getTokenHeader,
-	getTokenSignature,
-	cookieExtractor,
+  getTokenHeader,
+  getTokenSignature,
+  cookieExtractor,
 };
